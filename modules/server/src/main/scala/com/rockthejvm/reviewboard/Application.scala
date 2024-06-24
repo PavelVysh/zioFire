@@ -15,7 +15,7 @@ object Application extends ZIOAppDefault {
         ZioHttpServerOptions.default
       ).toHttp(healthController.health))
   } yield ()
-// dummy 1
+
   override def run = serverProgram.provide(
     Server.default
   )
