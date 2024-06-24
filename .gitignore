@@ -27,6 +27,7 @@
 # target directory for build
 /build/
 /modules/foundations/target/
+/modules/server/target/
 
 # other
 /out/
