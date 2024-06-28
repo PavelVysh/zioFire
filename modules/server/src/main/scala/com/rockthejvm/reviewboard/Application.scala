@@ -2,7 +2,10 @@ package com.rockthejvm.reviewboard
 
 import com.rockthejvm.reviewboard.http.HttpApi
 import com.rockthejvm.reviewboard.http.controllers.{CompanyController, HealthController}
-import com.rockthejvm.reviewboard.services.CompanyService
+import com.rockthejvm.reviewboard.repositories.{CompanyRepositoryLive, Repository}
+import com.rockthejvm.reviewboard.services.{CompanyService, CompanyServiceLive}
+import io.getquill.SnakeCase
+import io.getquill.jdbczio.Quill
 import zio.*
 import zio.http.Server
 import sttp.tapir.*
@@ -20,6 +23,8 @@ object Application extends ZIOAppDefault {
 
   override def run = serverProgram.provide(
     Server.default,
-    CompanyService.dummyLayer
+    CompanyServiceLive.layer,
+    CompanyRepositoryLive.layer,
+    Repository.dataLayer
   )
 }
