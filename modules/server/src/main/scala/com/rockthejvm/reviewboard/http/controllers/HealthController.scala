@@ -7,7 +7,7 @@ import zio.*
 class HealthController private extends HealthEndpoint with BaseController {
   val health: ServerEndpoint[Any, Task] = healthEndpoint
     .serverLogicSuccess[Task](_ => ZIO.succeed("Health OK!"))
-  
+
   override val routes: List[ServerEndpoint[Any, Task]] = List(health)
 }
 

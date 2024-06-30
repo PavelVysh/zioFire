@@ -17,9 +17,9 @@ trait CompanyRepository {
 class CompanyRepositoryLive(quill: Quill.Postgres[SnakeCase]) extends CompanyRepository {
   import quill.*
 
-  inline given schema: SchemaMeta[Company] = schemaMeta[Company]("companies")
+  inline given schema: SchemaMeta[Company]  = schemaMeta[Company]("companies")
   inline given insMeta: InsertMeta[Company] = insertMeta[Company](_.id)
-  inline given upMeta: UpdateMeta[Company] = updateMeta[Company](_.id)
+  inline given upMeta: UpdateMeta[Company]  = updateMeta[Company](_.id)
 
   override def create(company: Company): Task[Company] = run {
     query[Company]
@@ -38,11 +38,11 @@ class CompanyRepositoryLive(quill: Quill.Postgres[SnakeCase]) extends CompanyRep
   } yield updated
 
   override def delete(id: Long): Task[Company] = run {
-      query[Company]
-        .filter(_.id == lift(id))
-        .delete
-        .returning(r => r)
-    }
+    query[Company]
+      .filter(_.id == lift(id))
+      .delete
+      .returning(r => r)
+  }
 
   override def getById(id: Long): Task[Option[Company]] = run {
     query[Company]
@@ -61,6 +61,6 @@ class CompanyRepositoryLive(quill: Quill.Postgres[SnakeCase]) extends CompanyRep
 
 object CompanyRepositoryLive {
   val layer = ZLayer {
-      ZIO.service[Quill.Postgres[SnakeCase.type]].map(quill => CompanyRepositoryLive(quill))
+    ZIO.service[Quill.Postgres[SnakeCase.type]].map(quill => CompanyRepositoryLive(quill))
   }
 }

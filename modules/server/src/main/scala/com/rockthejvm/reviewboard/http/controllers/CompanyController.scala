@@ -8,7 +8,9 @@ import zio.*
 
 import collection.mutable
 
-class CompanyController private (service: CompanyService) extends CompanyEndpoints with BaseController {
+class CompanyController private (service: CompanyService)
+    extends CompanyEndpoints
+    with BaseController {
 
   val create: ServerEndpoint[Any, Task] = createEndpoint.serverLogicSuccess { req =>
     service.create(req)
@@ -19,8 +21,8 @@ class CompanyController private (service: CompanyService) extends CompanyEndpoin
   }
 
   val getById: ServerEndpoint[Any, Task] = getByIdEndpoint.serverLogicSuccess { req =>
-    ZIO.attempt(req.toLong).flatMap(service.getById).catchSome{
-      case _: NumberFormatException => service.getBySlug(req)
+    ZIO.attempt(req.toLong).flatMap(service.getById).catchSome { case _: NumberFormatException =>
+      service.getBySlug(req)
     }
   }
   override val routes: List[ServerEndpoint[Any, Task]] = List(create, getAll, getById)
