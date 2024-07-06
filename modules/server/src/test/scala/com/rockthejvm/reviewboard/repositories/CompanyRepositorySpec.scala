@@ -5,7 +5,6 @@ import com.rockthejvm.reviewboard.domain.data.Company
 import zio.*
 import zio.test.*
 import com.rockthejvm.reviewboard.syntax.*
-import org.postgresql.ds.PGSimpleDataSource
 
 import java.sql.SQLException
 import javax.sql.DataSource
@@ -13,6 +12,8 @@ import javax.sql.DataSource
 object CompanyRepositorySpec extends ZIOSpecDefault with RepositorySpec {
 
   private val rtjvm = Company(1L, "rock-the-jvm", "Rock the JVM", "rockthejvm.com")
+
+  override val initScript = "sql/companies.sql"
 
   private def genCompany(): Company =
     Company(-1L, genString(), genString(), genString())

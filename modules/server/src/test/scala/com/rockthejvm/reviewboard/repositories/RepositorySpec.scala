@@ -7,11 +7,13 @@ import zio.*
 import javax.sql.DataSource
 
 trait RepositorySpec {
+  
+  val initScript:String
 
   private def createContainer() = {
     java.lang.System.setProperty("DOCKER_HOST", "unix:///Users/pavlovy/.lima/docker.sock")
     val container: PostgreSQLContainer[Nothing] =
-      PostgreSQLContainer("postgres").withInitScript("sql/companies.sql")
+      PostgreSQLContainer("postgres").withInitScript(initScript)
     container.start()
     container
   }
