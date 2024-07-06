@@ -28,16 +28,31 @@ class ReviewRepositoryLive private (quill: Quill.Postgres[SnakeCase]) extends Re
 
   inline given insMeta: InsertMeta[Review] = insertMeta[Review](_.id, _.updated, _.created)
 
-  inline given upMeta: UpdateMeta[Review] = updateMeta[Review](_.id, _.updated, _.created)
+  inline given upMeta: UpdateMeta[Review] =
+    updateMeta[Review](_.id, _.companyId, _.userId, _.created)
   override def create(review: Review): Task[Review] = run {
     query[Review]
       .insertValue(lift(review))
       .returning(r => r)
   }
 
-  override def update(id: Long, op: Review => Review): Task[Review] = ???
+  override def update(id: Long, op: Review => Review): Task[Review] =
+    for {
+      current <- getById(id).someOrFail(new RuntimeException("Couldn't update"))
+      updated <- run {
+        query[Review]
+          .filter(_.id == lift(id))
+          .updateValue(lift(op(current)))
+          .returning(r => r)
+      }
+    } yield updated
 
-  override def delete(id: Long): Task[Review] = ???
+  override def delete(id: Long): Task[Review] = run {
+    query[Review]
+      .filter(_.id == lift(id))
+      .delete
+      .returning(r => r)
+  }
 
   override def getById(id: Long): Task[Option[Review]] = run {
     query[Review]

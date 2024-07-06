@@ -3,9 +3,10 @@ package com.rockthejvm.reviewboard.repositories
 import com.rockthejvm.reviewboard.domain.data.Review
 import zio.test.*
 import zio.*
-import com.rockthejvm.reviewboard.syntax._
+import com.rockthejvm.reviewboard.syntax.*
 
 import java.time.Instant
+import java.util.concurrent.TimeUnit
 
 object ReviewRepositorySpec extends ZIOSpecDefault with RepositorySpec {
 
